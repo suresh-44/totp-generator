@@ -11,14 +11,10 @@ let getToken = (RG_TIME) => {
   return parseInt("0x" + hash.substr(-4)) % 10000;
 };
 
+const verifyToken = (secret, user_token) => {
+  let token = getToken(secret);
 
-
-
-
-const verifyToken = (secrete, tok) => {
-  let token = getToken(secrete);
-
-  return token === tok
+  return token === user_token
 }
 
 module.exports = {verifyToken};

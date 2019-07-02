@@ -35,7 +35,7 @@ app.post('/validate', (req, res) => {
     }
   }).then(user => {
     // console.log(user[0].secrete)
-    const isValid = verifyToken(user[0].secrete, req.body.token)
+    const isValid = verifyToken(user[0].secret, req.body.token)
 
     res.json({valid : isValid})
   })
@@ -45,7 +45,7 @@ app.post('/user/register', (req, res) => {
   User.create({
     username : req.body.username,
     password : req.body.password,
-    secrete : new Date().getTime().toString()
+    secret : new Date().getTime().toString()
   }).then(user => {
     res.json(user)
   }).catch(err => console.log(err))

@@ -7,6 +7,6 @@ module.exports = (sequlize, type) => {
     },
     username : type.STRING,
     password : type.STRING,
-    secrete : type.STRING
+    secret : type.STRING
   })
 }
