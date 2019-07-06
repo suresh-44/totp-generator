@@ -13,4 +13,3 @@ sequelize.sync()
 
 module.exports  =  user;
 
-// 'postgres://ndlcmkmr:DPDCoZNZn7t7D6acG9FZxluz1izt2aak@raja.db.elephantsql.com:5432/ndlcmkmr'
