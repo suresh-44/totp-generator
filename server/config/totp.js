@@ -1,8 +1,8 @@
 const crypto = require("crypto");
 
 
-let getToken = () => {
-  let RG_TIME = 1561115594546;
+let getToken = (RG_TIME) => {
+ 
 
   let CR_TIME = new Date().getTime();
   let mean = ~~((CR_TIME - RG_TIME) / 30000);
@@ -11,6 +11,12 @@ let getToken = () => {
   return parseInt("0x" + hash.substr(-4)) % 10000;
 };
 
-let token = getToken()
+const verifyToken = (secret, user_token) => {
+  let token = getToken(secret);
 
-console.log(token)
+  token = token.toString().padStart(4, "0")
+
+  return token === user_token
+}
+
+module.exports = {verifyToken};
