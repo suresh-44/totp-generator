@@ -1,8 +1,9 @@
 const express = require('express');
 
-const User = require('../sequelize')
+const User = require('../config/sequelize')
 
-const hashPassword = require('../config/hashPassword')
+const hashPassword = require('../config/hashPassword');
+const {verifyToken} = require('../totp');
 
 const router = express.Router();
 
@@ -10,6 +11,8 @@ router.get('/', (req, res) => {
   res.send('Hello OSL')
 })
 
+
+// login users
 router.post('/user/login', (req, res)=> {
   User.findAll({
     where : {
@@ -69,7 +72,7 @@ router.post('/user/register', async (req, res) => {
             user
           });
         })
-        .catch(err => console.log(err));
+        .catch(err => res.status(400).json(err.errors[0]));
   }
 })     
 

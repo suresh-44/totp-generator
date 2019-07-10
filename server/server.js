@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const {verifyToken} = require('./totp')
-const User = require('./sequelize')
+// environment variables
+require('./config/env')
+
+const User = require('./config/sequelize')
 
 // routes
 
