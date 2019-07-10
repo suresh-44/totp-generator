@@ -14,6 +14,8 @@ let getToken = (RG_TIME) => {
 const verifyToken = (secret, user_token) => {
   let token = getToken(secret);
 
+  token = token.toString().padStart(4, "0")
+
   return token === user_token
 }
 
