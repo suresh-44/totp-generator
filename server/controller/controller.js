@@ -13,13 +13,13 @@ exports.signin =  (req, res) => {
     }
   }).then(user => {
     if(!user) {
-      return res.status(404).json({msg :'user is not found'});
+      return res.status(404).json({msg :'User data is not found in the database'});
     }
 
     const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
     
     if(!passwordIsValid) {
-      return res.status(401).json({auth: false, token : 'invalid', msg : 'password is incorrect'});
+      return res.status(401).json({auth: false, token : 'invalid', msg : 'Invalid password'});
     }
 
     const token = jwt.sign({id : user.id}, process.env.SECRET, {
@@ -28,7 +28,7 @@ exports.signin =  (req, res) => {
 
     res.status(200).json({auth : true, token});
   }).catch(err => {
-    res.status(500).json({msg : "invalid email"})
+    res.status(500).json({msg : "Invalid e-mail"})
   })
 }
 
@@ -42,13 +42,13 @@ exports.signup = async (req, res) => {
   }
 
   if(!req.body.email || req.body.email === undefined){
-    errors.push('Email is not given');
+    errors.push('E-mail is not provided');
   }
   if(!req.body.username || req.body.username === undefined){
-    errors.push('username is not given');
+    errors.push('Username is not provided');
   }
   if(!req.body.password || req.body.password === undefined){
-    errors.push('Password is not given')
+    errors.push('Password is not provided')
   }
 
   if(errors.length > 0){
@@ -71,7 +71,7 @@ exports.signup = async (req, res) => {
 exports.validate = (req, res) => {
   const token = req.body.token;
   if(!token) {
-    return res.status(400).json({msg: 'Token must be provided'})
+    return res.status(400).json({msg: 'Authentication Error'})
   }
 
   User.findOne({
@@ -85,7 +85,7 @@ exports.validate = (req, res) => {
     const verify = totp.verifyToken(user.secret, token)
 
     if(!verify){
-      return res.status(400).json({msg : 'Token is not valid'});
+      return res.status(400).json({msg : 'Authentication Error'});
     }
 
     res.status(200).json({msg : "Token is verified successfully"});
