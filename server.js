@@ -19,7 +19,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs")
 hbs.registerPartials(__dirname + "/views/partials");
 
-require('./router/index')(app)
+require('./router/index')(app);
 
 // To start the server
 app.listen(process.env.PORT, ()=>{

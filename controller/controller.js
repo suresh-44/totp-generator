@@ -22,7 +22,7 @@ exports.signin = async (req, res) => {
     if(!user) {
       return res.status(404).json({error :'User data is not found in the database'});
     }
-    
+
     if(user.password === hashPwd) {
       return res.status(401).json({msg : 'Invalid password'});
     }
@@ -31,22 +31,22 @@ exports.signin = async (req, res) => {
   }).catch(err => {
     res.status(500).json({msg : err.message})
   })
-}
+};
 
 exports.signup = async (req, res) => {
   let errors = [] ;
-  hashSecret = hashPassword(new Date().getTime());
+  let hashSecret = hashPassword(new Date().getTime());
   let body = {
     email : req.body.email,
     password : req.body.password,
     secret : new Date().getTime(),
-  }
+  };
 
-  if(!req.body.email || req.body.email === undefined){
+  if(!req.body.email){
     errors.push('E-mail is not provided');
   }
- 
-  if(!req.body.password || req.body.password === undefined){
+
+  if(!req.body.password){
     errors.push('Password is not provided')
   }
 
@@ -58,7 +58,7 @@ exports.signup = async (req, res) => {
     } catch(e){
       return res.json({error: e.message});
     }
-    
+
     User
         .create(body)
         .then(user => {
@@ -69,23 +69,24 @@ exports.signup = async (req, res) => {
         })
         .catch(err => res.status(400).json(err.errors[0]));
   }
-}
+};
 
 exports.validate = (req, res) => {
   const token = req.body.token;
+  const email = req.body.email;
   if(!token) {
     return res.status(400).json({msg: 'Authentication Error'})
   }
 
   User.findOne({
     where : {
-      id : req.userId
+      email
     }
   }).then(user => {
     if(!user){
       return res.status(404).json({msg: 'User not found'})
     }
-    const verify = totp.verifyToken(user.secret, token)
+    const verify = totp.verifyToken(user.secret, token);
 
     if(!verify){
       return res.status(400).json({msg : 'Authentication Error'});
@@ -96,4 +97,4 @@ exports.validate = (req, res) => {
   }).catch(err => {
     res.send(err)
   })
-}
+};
