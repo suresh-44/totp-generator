@@ -35,36 +35,26 @@ localStorage.setItem("email", "test@test.com");
 localStorage.setItem("secret", "1569681945027");
 const body ={
   email: localStorage.getItem("email"),
-  secret: localStorage.getItem("secret")
 };
 
 const qrcode = new QRCode("qrcode");
-qrcode.makeCode(JSON.stringify(body));
 
 let getToken = (RG_TIME) => {
   let CR_TIME = new Date().getTime();
   let mean = Math.floor((CR_TIME - RG_TIME) / 30000);
 
-  // sha1("");
-  // var hash = sha1.create();
-  // hash.update(mean.toString())
-  // hash.hex();
-  //
-  // hash = hash.toString("hex");
-  // console.log(hash);
-
-  // var hash = CryptoJS.HmacSHA1(mean.toString(), "");
-  //   var hashInBase64 = CryptoJS.enc.Base64.stringify(hash).finalize();
-  // console.log(hashInBase64.substr(-4));
-  // return (parseInt("0x" + hashInBase64.substr(-4)) % 10000);
   var hash1 = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA1,mean.toString()); /** Hashing algorithm sha512 */
-
-  // hash1.update();
 
   var value = '' + hash1.finalize();
   return (parseInt("0x" + value.substr(-4)) % 10000);
 
 };
  // getToken( parseInt(body.secret));
-const token =  getToken( parseInt(body.secret));
-console.log(token);
+body.token =  getToken( parseInt(localStorage.getItem("secret")));
+qrcode.makeCode(JSON.stringify(body));
+
+setInterval(()=> {
+  body.token =  getToken( parseInt(localStorage.getItem("secret")));
+  qrcode.makeCode(JSON.stringify(body));
+
+}, 30000);
