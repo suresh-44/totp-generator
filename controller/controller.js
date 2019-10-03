@@ -8,6 +8,7 @@ const totp = require('../config/totp');
 exports.signin = async (req, res) => {
   const email = req.body.email;
   const pwd = req.body.password;
+  console.log(email, pwd);
   let hashPwd;
   try {
     hashPwd = await hashPassword(pwd);

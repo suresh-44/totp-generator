@@ -6,6 +6,8 @@ require('dotenv').config();
 
 const app = express();
 
+const Index = require("./router/index");
+
 app.use(express.static("public"));
 
 // Middleware
@@ -19,8 +21,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs")
 hbs.registerPartials(__dirname + "/views/partials");
 
-require('./router/index')(app);
-
+app.use("/", Index);
 // To start the server
 app.listen(process.env.PORT, ()=>{
   console.log(`server up at ${process.env.PORT}`)

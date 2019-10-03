@@ -24,14 +24,13 @@ self.addEventListener("fetch", e => {
         .then(r=> {
             return r || fetch(e.request)
                 .then(response=> {
-                    console.log("+============   "+ JSON.stringify( response.body, undefined, 2));
                     return caches.open(CACHE_NAME).then(cache => {
-                        cache.put(e.request, response.clone())
+                        cache.put(e.request, response.clone());
                         return response;
                     })
                 })
         }).catch(err=> {
-            console.log(err)
+            console.log(err);
             caches.open(CACHE_NAME).then(r=> r);
         })
   )

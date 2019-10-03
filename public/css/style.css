@@ -100,3 +100,14 @@ body {
     height:160px;
     margin-top:15px;
   }
+
+.add-button {
+    font-size: 1.4rem;
+    border: none;
+    cursor: pointer;
+    margin-top: 6rem;
+    padding: 0.5rem 2rem;
+    background-color: #fafbff;
+    margin-left: 3rem;
+
+}

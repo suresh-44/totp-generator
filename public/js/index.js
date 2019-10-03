@@ -1,3 +1,15 @@
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('../service-worker.js')
+        .then(function(registration) {
+          console.log('Service worker is enabled successfully, scope is:', registration.scope);
+        })
+        .catch(function(error) {
+          console.log('Service worker registration failed, error:', error);
+        });
+  });
+}
+
 const addBtn = document.querySelector('.add-button');
 addBtn.style.display = 'none';
 var deferredPrompt;
@@ -19,54 +31,40 @@ window.addEventListener("beforeinstallprompt", (e)=> {
   })
 });
 
-// let seconds = 30;
-// let doPlay = true;
-// let loader = document.getElementById('loader')
-// let α = 0
-// let π = Math.PI
-// let t = (seconds/360 * 1000);
+localStorage.setItem("email", "test@test.com");
+localStorage.setItem("secret", "1569681945027");
+const body ={
+  email: localStorage.getItem("email"),
+  secret: localStorage.getItem("secret")
+};
 
-// (function draw() {
-//   α++;
-//   α %= 360;
-//   let r = ( α * π / 180 )
-//     , x = Math.sin( r ) * 125
-//     , y = Math.cos( r ) * - 125
-//     , mid = ( α > 180 ) ? 1 : 0
-//     , anim = 'M 0 0 v -125 A 125 125 1 ' 
-//            + mid + ' 1 ' 
-//            +  x  + ' ' 
-//            +  y  + ' z';
-//   //[x,y].forEach(function( d ){
-//   //  d = Math.round( d * 1e3 ) / 1e3;
-//   //});
+const qrcode = new QRCode("qrcode");
+qrcode.makeCode(JSON.stringify(body));
 
-//   loader.setAttribute( 'd', anim );
+let getToken = (RG_TIME) => {
+  let CR_TIME = new Date().getTime();
+  let mean = Math.floor((CR_TIME - RG_TIME) / 30000);
 
-//   if(doPlay){
-//     setTimeout(draw, t); // Redraw
-//   }
-// })();
+  // sha1("");
+  // var hash = sha1.create();
+  // hash.update(mean.toString())
+  // hash.hex();
+  //
+  // hash = hash.toString("hex");
+  // console.log(hash);
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('../service-worker.js')
-  .then(function(registration) {
-    console.log('Service worker is enabled successfully, scope is:', registration.scope);
-  })
-  .catch(function(error) {
-    console.log('Service worker registration failed, error:', error);
-  });
-  });
-}
+  // var hash = CryptoJS.HmacSHA1(mean.toString(), "");
+  //   var hashInBase64 = CryptoJS.enc.Base64.stringify(hash).finalize();
+  // console.log(hashInBase64.substr(-4));
+  // return (parseInt("0x" + hashInBase64.substr(-4)) % 10000);
+  var hash1 = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA1,mean.toString()); /** Hashing algorithm sha512 */
 
-const qrCode = new QRCode("qrcode");
-qrCode.makeCode("Suresh");
+  // hash1.update();
 
-localStorage.setItem("key", "value");
-console.log(localStorage.getItem("key"))
+  var value = '' + hash1.finalize();
+  return (parseInt("0x" + value.substr(-4)) % 10000);
 
-var testObject = { 'one': 1, 'two': 2, 'three': 3 };
-
-localStorage.setItem("object", JSON.stringify(testObject));
-console.log(JSON.parse(localStorage.getItem("object")));
+};
+ // getToken( parseInt(body.secret));
+const token =  getToken( parseInt(body.secret));
+console.log(token);
