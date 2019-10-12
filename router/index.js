@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 // routers
 const controller = require('../controller/controller')
-const authJwt = require('./verifyJwtToken')
 
 router.get('/', (req, res) => {
     // res.sendFile(__dirname+ '/index.html');
