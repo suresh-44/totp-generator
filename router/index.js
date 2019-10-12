@@ -5,8 +5,6 @@ const router = express.Router();
 const controller = require('../controller/controller')
 const authJwt = require('./verifyJwtToken')
 
-
-
 router.get('/', (req, res) => {
     // res.sendFile(__dirname+ '/index.html');
     res.render("index", {secret: "1234"});
@@ -16,7 +14,7 @@ router.get('/', (req, res) => {
 router.post('/signin',controller.signin);
 
 // Validate the token
-router.post('/validate',[authJwt.isAuthenticated] ,controller.validate);
+router.post('/validate',controller.validate);
 
 // Register new user
 router.post('/signup', controller.signup);
